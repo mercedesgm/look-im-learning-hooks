@@ -3,15 +3,22 @@ import React, {Component} from 'react';
 class App extends Component{
   state = {
     count: 0,
-    isOn: false
+    isOn: false,
+    x: null,
+    y: null
   }
 
   componentDidMount() {
     document.title = `You have been clicked ${this.state.count} times.`
+    window.addEventListener('mousemove', this.handleMouseMove)
   }
   
   componentDidUpdate() {
     document.title = `You have been clicked ${this.state.count} times.`
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('mousemove', this.handleMouseMove)
   }
 
   incrementCount = () => {
@@ -24,6 +31,13 @@ class App extends Component{
     this.setState(prevState => ({
       isOn: !prevState.isOn
     }))
+  }
+
+  handleMouseMove = event => {
+    this.setState({
+      x: event.pageX,
+      y: event.pageY
+    })
   }
 
   render() {
@@ -40,6 +54,10 @@ class App extends Component{
           background: this.state.isOn ? 'yellow ': 'grey'
         }} onClick={this.toggleLight}>
         </div>
+
+        <h2>Mouse Position</h2>
+        <p>X Position: {this.state.x}</p>
+        <p>Y Position: {this.state.y}</p>
       </>
     );
   }
